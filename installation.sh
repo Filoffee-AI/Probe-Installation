@@ -12,7 +12,7 @@ sudo apt update && sudo apt upgrade -y
 # sudo mv /tmp/RPM-GPG-KEY-mysql /etc/apt/trusted.gpg.d/
 
 # Install necessary packages, including snmpd
-sudo apt install -y python3 python3-pip wget lsb-release gnupg git build-essential libssl-dev libffi-dev python3-dev snmp snmpd cron nmap
+sudo apt install -y python3 python3-pip wget lsb-release gnupg git build-essential libssl-dev libffi-dev python3-dev snmp snmpd cron nmap wireguard curl sshpass
 
 # Enable and start the cron service
 sudo systemctl enable cron
@@ -109,7 +109,7 @@ CREATE TABLE fn_latest_in_out_octates (
 # Clone the repository containing MIBs, isp_internal_probe, and snmp.conf from GitHub
 GITHUB_USERNAME="SharanuGaneshLinkeye"   # Replace with your GitHub username
 GITHUB_TOKEN="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"   # Replace with your personal access token
-GIT_REPO_URL="https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/Filoffee-AI/internal_probe_files.git"  # Replace with actual repository URL
+GIT_REPO_URL="https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/Filoffee-AI/internal_probe_with_wg_for_single_customer.git"  # Replace with actual repository URL
 
 # Clone the GitHub repository
 git clone $GIT_REPO_URL /tmp/isp_repo
@@ -139,7 +139,7 @@ rm -rf /tmp/isp_repo
 pip3 install --upgrade pip
 
 pip3 install mysql-connector-python sqlalchemy numpy pandas \
-  netmiko paramiko pysnmp easysnmp python-crontab\
+  netmiko paramiko pysnmp easysnmp \
   cryptography keyring keyrings.alt \
   aiohttp aiosignal asttokens async-timeout \
   urllib3 influxdb-client python-nmap
@@ -148,14 +148,30 @@ pip3 install mysql-connector-python sqlalchemy numpy pandas \
 # Clear all existing cron jobs
 crontab -r  
 
+# Wireguard setup scripts
+cd /home/isp_internal_probe && cp wg0.conf /etc/wireguard
+cd /home/isp_internal_probe && chmod +755 wireguard-start.py
+cd /home/isp_internal_probe && python3 wireguard-start.py
+
 cd /home/isp_internal_probe && python3 encrypt.py
 rm /home/isp_internal_probe/config.json
 
+# Run /home/isp_internal_probe/probe_initial.sh once
+# sudo chmod +x /home/isp_internal_probe/probe_intial.sh
 cd /home/isp_internal_probe && python3 register_probe.py
 
 # Add cron jobs
-(crontab -l 2>/dev/null; echo "* * * * * cd /home/isp_internal_probe && python3 handle_cron_by_probe_status.py") | crontab -
-
+(crontab -l 2>/dev/null; echo "*/15 * * * * cd /home/isp_internal_probe && python3 check_config_update_run_probe_initial.py >> /home/isp_internal_probe/logs/inital_logs_\$(date +\%Y\%m\%d).log") | crontab -
+(crontab -l 2>/dev/null; echo "*/30 * * * * cd /home/isp_internal_probe && sudo sh probe_intial.sh >> /home/isp_internal_probe/logs/inital_logs_\$(date +\%Y\%m\%d).log") | crontab -
+(crontab -l 2>/dev/null; echo "*/10 * * * * cd /home/isp_internal_probe && python3 test_ssh_snmp.py >> /home/isp_internal_probe/logs/test_ssh_snmp_\$(date +\%Y\%m\%d).log") | crontab -
+(crontab -l 2>/dev/null; echo "*/30 * * * * cd /home/isp_internal_probe && sudo sh ssh_key_clear.sh") | crontab -
+(crontab -l 2>/dev/null; echo "0 */12 * * * cd /home/isp_internal_probe && python3 delete_old_logs.py") | crontab -
+(crontab -l 2>/dev/null; echo "* * * * * cd /home/isp_internal_probe && python3 get_octates.py >> /home/isp_internal_probe/logs/utilization_log_\$(date +\%Y\%m\%d).log") | crontab -
+(crontab -l 2>/dev/null; echo "* * * * * cd /home/isp_internal_probe && python3 get_push_edge_device_ping_status.py >> /home/isp_internal_probe/logs/ed_ping_status_log_\$(date +\%Y\%m\%d).log") | crontab -
+(crontab -l 2>/dev/null; echo "* * * * * cd /home/isp_internal_probe && python3 internal_probe_main_script.py >> /home/isp_internal_probe/logs/polling_logs_\$(date +\%Y\%m\%d).log") | crontab -
+(crontab -l 2>/dev/null; echo "* * * * * cd /home/isp_internal_probe && python3 poll_non_meraki_dbb_links.py >> /home/isp_internal_probe/logs/dbb_non_polling_logs_\$(date +\%Y\%m\%d).log") | crontab -
+(crontab -l 2>/dev/null; echo "* * * * * cd /home/isp_internal_probe && python3 poll_meraki_dbb_links.py >> /home/isp_internal_probe/logs/dbb_meraki_polling_logs_\$(date +\%Y\%m\%d).log") | crontab -
+(crontab -l 2>/dev/null; echo "*/5 * * * * cd /home/isp_internal_probe && python3 check_isp_down_for_cisco.py >> /home/isp_internal_probe/logs/check_link_down_for_cisco_\$(date +\%Y\%m\%d).log") | crontab -
 
 # Display installation status
 echo "Installation Complete"
