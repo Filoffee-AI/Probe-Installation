@@ -29,7 +29,7 @@ if ping_process.returncode != 0:
     pub_key = subprocess.check_output(pubkey_command, shell=True).decode("utf-8").strip()
 
     # Run the command to get a list of used IP addresses
-    command = f"sshpass -p {wg_password} ssh -o StrictHostKeyChecking=no {wg_username}@{wg_server}  wg show wg0 allowed-ips | grep -E -o '([0-9]{{1,3}}[\.]){{3}}[0-9]{{1,3}}'"
+    command = f"sshpass -p {wg_password} ssh -o StrictHostKeyChecking=no {wg_username}@216.48.183.59  wg show wg0 allowed-ips | grep -E -o '([0-9]{{1,3}}[\.]){{3}}[0-9]{{1,3}}'"
     output = subprocess.check_output(command, shell=True).decode("utf-8")
 
     # Extract the used IP addresses from the output
@@ -51,7 +51,7 @@ if ping_process.returncode != 0:
     subprocess.run(command, shell=True)
     sed_command = f"sudo sed -i 's/10.80.0.X/{available_ip}/' /etc/wireguard/wg0.conf"
     subprocess.run(sed_command, shell=True)
-    set_peer_command = f"sshpass -p {wg_password} ssh -o StrictHostKeyChecking=no {wg_username}@{wg_server} sudo wg set wg0 peer {pub_key} allowed-ips {available_ip} persistent-keepalive 25"
+    set_peer_command = f"sshpass -p {wg_password} ssh -o StrictHostKeyChecking=no {wg_username}@216.48.183.59 sudo wg set wg0 peer {pub_key} allowed-ips {available_ip} persistent-keepalive 25"
     subprocess.run(set_peer_command, shell=True)
     enable_wg_command = f"sudo systemctl enable wg-quick@wg0.service"
     subprocess.run(enable_wg_command, shell=True)
