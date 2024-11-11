@@ -107,8 +107,8 @@ CREATE TABLE fn_latest_in_out_octates (
 );"
 
 # Clone the repository containing MIBs, isp_internal_probe, and snmp.conf from GitHub
-GITHUB_USERNAME="GouravTerwadkar"   # Replace with your GitHub username
-GITHUB_TOKEN="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"   # Replace with your personal access token
+GITHUB_USERNAME="leetcodeisalie"   # Replace with your GitHub username
+GITHUB_TOKEN="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"   # Replace with your personal access token
 GIT_REPO_URL="https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/Filoffee-AI/internal_probe_with_wg_for_single_customer.git"  # Replace with actual repository URL
 
 # Clone the GitHub repository
