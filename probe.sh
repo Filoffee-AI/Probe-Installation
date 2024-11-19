@@ -4,7 +4,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt-get install -y curl jq
 
 GITHUB_USERNAME="GouravTerwadkar" 
-GITHUB_TOKEN="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"  
+GITHUB_TOKEN="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"  
 GIT_REPO_URL="https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/Filoffee-AI/Basestation-DC-Agent-V1.1.git"  
 GIT_MIB_REPO_URL="https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/Filoffee-AI/Filo-MIBS.git"
 
