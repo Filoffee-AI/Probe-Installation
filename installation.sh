@@ -148,13 +148,17 @@ pip3 install mysql-connector-python sqlalchemy numpy pandas \
 # Clear all existing cron jobs
 crontab -r  
 
+
+cd /home/isp_internal_probe && python3 encrypt.py
+rm /home/isp_internal_probe/config.json
+
+
 # Wireguard setup scripts
 cd /home/isp_internal_probe && cp wg0.conf /etc/wireguard
 cd /home/isp_internal_probe && chmod +755 wireguard-start.py
 cd /home/isp_internal_probe && python3 wireguard-start.py
 
-cd /home/isp_internal_probe && python3 encrypt.py
-rm /home/isp_internal_probe/config.json
+
 
 # Run /home/isp_internal_probe/probe_initial.sh once
 # sudo chmod +x /home/isp_internal_probe/probe_intial.sh
