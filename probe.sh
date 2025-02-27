@@ -25,5 +25,5 @@ cd /home/Basestation-DC-Agent-V1.1
 
 sudo git fetch
 sudo git switch feature/Installation
-# sudo bash /home/Basestation-DC-Agent-V1.1/install.sh
+sudo bash /home/Basestation-DC-Agent-V1.1/install.sh
 sudo bash /home/Basestation-DC-Agent-V1.1/install_script.sh
