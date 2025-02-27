@@ -3,7 +3,7 @@
 sudo apt update && sudo apt upgrade -y
 sudo apt-get install -y curl jq qemu
 
-read -sp "Enter your ACcess token: " GITHUB_TOKEN
+read -sp "Enter your Access token: " GITHUB_TOKEN
 echo
 
 # Define GitHub username and repository URLs
