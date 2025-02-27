@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo apt update && sudo apt upgrade -y
-sudo apt-get install -y curl jq
+sudo apt-get install -y curl jq qemu
 
 read -sp "Enter your GitHub token: " GITHUB_TOKEN
 echo
