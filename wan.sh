@@ -14,6 +14,9 @@ sudo apt update && sudo apt upgrade -y
 # Install necessary packages, including snmpd
 sudo apt install -y python3 python3-pip wget lsb-release gnupg git build-essential libssl-dev libffi-dev python3-dev snmp snmpd cron nmap wireguard curl sshpass
 
+#optional part to install
+sudo apt install python-yaml
+
 # Enable and start the cron service
 sudo systemctl enable cron
 sudo systemctl start cron
