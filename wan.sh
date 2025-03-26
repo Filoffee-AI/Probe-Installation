@@ -12,7 +12,7 @@ sudo apt update && sudo apt upgrade -y
 # sudo mv /tmp/RPM-GPG-KEY-mysql /etc/apt/trusted.gpg.d/
 
 # Install necessary packages, including snmpd
-sudo apt install -y python3 python3-pip wget lsb-release gnupg git build-essential libssl-dev libffi-dev python3-dev snmp snmpd cron nmap wireguard curl sshpass pyyaml 
+sudo apt install -y python3 python3-pip wget lsb-release gnupg git build-essential libssl-dev libffi-dev python3-dev snmp snmpd cron nmap wireguard curl sshpass
 
 # Enable and start the cron service
 sudo systemctl enable cron
